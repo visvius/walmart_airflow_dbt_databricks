@@ -1,3 +1,4 @@
+-- define the schema for the Walmart dataset
 
 CREATE TABLE customers (
     customer_id BIGINT PRIMARY KEY,
