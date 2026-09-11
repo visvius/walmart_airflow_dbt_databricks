@@ -9,4 +9,13 @@ wheels/
 # Virtual environments
 .venv
 
+# DBT section
+target/
+dbt_packages/
+logs/
+.env
+.user.yml
+
+# Others
+profiles.yml
 .env
