@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='order_id'
+        unique_key='product_id'
     )
 }}
 
@@ -9,7 +9,7 @@ SELECT
  *,
  current_timestamp() as processed_at
 FROM
-    {{ source('walmart_databricks', 'orders') }}
+    {{ source('walmart_databricks', 'products') }}
 
 {% if is_incremental() %}
     AND updated_timestamp > (SELECT COALESCE(MAX(updated_timestamp), '1900-01-01') FROM {{ this }})
