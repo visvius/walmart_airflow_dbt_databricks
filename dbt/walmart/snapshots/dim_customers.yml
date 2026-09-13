@@ -1,0 +1,11 @@
+snapshots:
+  - name: dim_customers
+    relation: ref('eph_customers')
+    description: "scd type 2 for dim_customers"
+    config:
+      database: walmart
+      schema: gold
+      strategy: timestamp 
+      unique_key: customer_id
+      updated_at: customer_updated_timestamp
+      dbt_valid_to_current: "to_date('9999-12-31')"
