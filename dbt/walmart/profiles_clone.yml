@@ -1,0 +1,11 @@
+walmart:
+  outputs:
+    dev:
+      catalog: walmart
+      host: 
+      http_path: 
+      schema: dbt_schema
+      threads: 1
+      token: 
+      type: databricks
+  target: dev
