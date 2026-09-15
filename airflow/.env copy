@@ -1,0 +1,7 @@
+# airflow environment variables
+AIRFLOW_UID = 50000
+
+# custom secrets/configurations
+DATABRICKS_HOST=
+DATABRICKS_TOKEN=
+DATABRICKS_JOB_ID=

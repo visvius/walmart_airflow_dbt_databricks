@@ -1,0 +1,1 @@
+virtual env created removing errors during development. NOT NEEDED in PRODUCTION.
