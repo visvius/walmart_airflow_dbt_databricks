@@ -17,5 +17,6 @@ logs/
 .user.yml
 
 # Others
+.vscode/
 profiles.yml
 .env
