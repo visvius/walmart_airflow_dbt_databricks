@@ -31,7 +31,7 @@ Data flows through three distinct stages:
 <br><br>
 
 ## Data Modeling Strategy & Lineage
-![dbt Lineage Diagram](docs/lineage_diagram.png)
+![dbt Lineage Diagram](docs/data_lineage.png)
 
 The transformation logic relies on dbt techniques to optimize performance and track historical changes:
 * **Ephemeral Tables:** Used to optimize intermediate queries without materializing unnecessary tables in the warehouse.
