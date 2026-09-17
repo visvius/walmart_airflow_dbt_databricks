@@ -2,7 +2,7 @@
 An end-to-end data engineering pipeline implementing a Medallion architecture to process enterprise retail operations data. This project extracts multi-domain data including data about customers, employees, products, orders, order items and stores — from a PostgreSQL database into Bronze layer, transforms it through clearly defined Silver and Gold layers using dbt, and orchestrates the entire workflow with Apache Airflow using Docker Containers.
 <br><br>
 ## Architecture & Data Flow
-![Architecture Diagram](docs/architecture_diagram.png)
+![Architecture Diagram](docs/project_architecture.png)
 
 Data flows through three distinct stages:
 1. **Bronze (Ingestion Layer):** Raw data is extracted from PostgreSQL.
@@ -40,7 +40,7 @@ The transformation logic relies on dbt techniques to optimize performance and tr
 <br><br>
 
 ## Orchestration
-![Airflow DAG Structure](docs/walmart_ingest.png)
+![Airflow DAG Structure](docs/airflow_dag.png)
 
 Apache Airflow manages the task dependencies and orchestrates complete pipeline from ingesting data into databricks to complete gold layer result.<br>
 It ensures data ingestion completes fully for all 6 tables before triggering the dbt transformation jobs in Databricks.
@@ -67,7 +67,7 @@ This project requires secrets to be filled in 3 files for running.<br>
 Navigate to `/data_ingestion`, create .venv, and execute the setup script to load the raw tables.<br>
 WORKS WITH ANY POSTGRESQL DB. 
 ```bash
-python setup_db.py
+python ddl/initialize_db.py
 ```
 
 ## 4. Start Airflow: 
