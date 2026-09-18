@@ -21,6 +21,7 @@ Data flows through three distinct stages:
 <br><br>
 
 ## Repository Structure
+The following directories are listed in the chronological order of their development:
 * **`/data_ingestion`**<br>
   Contains the Python scripts using `psycopg2` to establish the initial PostgreSQL database source and load the raw retail dataset.
 * **`/dbt`**<br>
@@ -30,22 +31,48 @@ Data flows through three distinct stages:
   Contains the DAGs that schedule and orchestrate the pipeline (currently scheduled daily at 11:00 AM IST). 
 <br><br>
 
-## Data Modeling Strategy & Lineage
+## Data Lineage
 ![dbt Lineage Diagram](docs/data_lineage.png)
 
-The transformation logic relies on dbt techniques to optimize performance and track historical changes:
-* **Ephemeral Tables:** Used to optimize intermediate queries without materializing unnecessary tables in the warehouse.
-* **Snapshots:** Implemented to build Type 2 Slowly Changing Dimensions (SCDs) in the Gold layer, accurately tracking historical states of dimensional records.
-* **Data Quality:** Primary key integrity checks and custom threshold macros are enforced at the Silver layer.
+The pipeline relies on structured dbt techniques to track data movement and ensure integrity:
+* **Pipeline Traceability:** Data flows predictably from Bronze raw tables through intermediate Silver views, terminating in the Gold presentation layer, allowing for clear auditing of every transformation step.
+* **Data Quality:** Primary key integrity checks and custom macros are enforced at the Silver layer before data is permitted to move downstream.
 <br><br>
+
+## Data Ingestion
+![Databricks Data Ingestion](docs/data_ingestion.png)
+
+To initially populate the Bronze layer, the pipeline utilizes the native **Databricks Data Ingestion** tool to pull from the serverless PostgreSQL database. 
+
+Instead of performing slow, full-table reloads, it uses Databricks streaming tables to incrementally stream new data from PostgreSQL directly into the Bronze layer. This query-based capture guarantees an efficient, 1:1 replication of the raw source data into the Databricks environment before any dbt transformations begin.
+
+
+## Data Modeling Strategy
+![Tables by Layer](docs/tables_by_layer.png)
+
+The modeling strategy follows the Medallion architecture:
+* **Bronze Layer:** Acts as the initial ingestion point, maintaining raw 1:1 copies of the 6 core source tables (customers, stores, products, employees, orders, order_items).
+* **Silver Layer:** The raw tables are first cleansed and standardized in the Silver Technical layer. They are then merged into a unified 'One-Big Table' (`obt_b`) in the Business Silver layer to pre-calculate and avoid repetitive complex joins.
+* **Gold Layer (Star Schema):** The flattened data is restructured into a presentation-ready Star Schema based on Context. It is optimized for analytical querying, separating business context into dimensions and measurable metrics into facts. 
+
+The following image shows the output Gold schema:
+
+![Star Schema](docs/star_schema.png)
+
+The final Gold layer relies on specific dbt features to track historical changes and optimize performance:
+* **Dimensions:** Tables like `dim_products` and `dim_stores` store descriptive attributes. Snapshots are implemented here to build Type 2 Slowly Changing Dimensions (SCDs),  tracking historical states of records via `dbt_valid_from` and `dbt_valid_to` columns.
+* **Facts:** The `fact_orders` table serves as the numerical core, holding calculated measures (e.g., `total_amount`, `quantity`) alongside the foreign keys needed to slice those numbers by the surrounding dimensions.
+* **Ephemeral Tables:** Used to optimize intermediate queries during this modeling phase without materializing unnecessary tables in the warehouse.
+
 
 ## Orchestration
 ![Airflow DAG Structure](docs/airflow_dag.png)
 
-Apache Airflow manages the task dependencies and orchestrates complete pipeline from ingesting data into databricks to complete gold layer result.<br>
-It ensures data ingestion completes fully for all 6 tables before triggering the dbt transformation jobs in Databricks.
-<br><br>
+Apache Airflow serves as the central orchestrator for the project, managing the end-to-end execution of the pipeline. 
 
+Key functions include:
+* **Dependency Management:** Enforces strict execution order, ensuring data ingestion for all 6 source tables completes successfully before any downstream models run.
+* **Automated Transformations:** Triggers Databricks compute to execute the dbt transformation sequence across the Silver and Gold layers.
 
 # Setup Guide
 
@@ -65,7 +92,7 @@ This project requires secrets to be filled in 3 files for running.<br>
 
 ## 3. Setting up PostgreSql Database for Source
 Navigate to `/data_ingestion`, create .venv, and execute the setup script to load the raw tables.<br>
-WORKS WITH ANY POSTGRESQL DB. 
+*WORKS WITH ANY POSTGRESQL DB.* 
 ```bash
 python ddl/initialize_db.py
 ```
@@ -79,3 +106,4 @@ docker-compose up -d
 ## 5. Trigger the Pipeline
 Access the Airflow UI at `localhost:8080` and unpause the DAG to execute the full extraction and transformation process.
 User and Password for login are set to defaults, which are : 'airflow'
+

@@ -41,6 +41,18 @@ wheels = [
 ]
 
 [[package]]
+name = "artifact-parser"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b2/89/659857b74d0f9803c837c9aac0f37bb2d6b34a0a05a95e9c3920278ff120/artifact_parser-1.0.1.tar.gz", hash = "sha256:7a8f76250fbef1143e886d062de13b892c17ac9e48fcd4c622ad9f7324fdde2f", size = 201638, upload-time = "2026-08-10T08:38:04.856Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1e/7f/14354cf482af3c16b11d48b721b982749c3dbed148e2b68edab7da986a01/artifact_parser-1.0.1-py3-none-any.whl", hash = "sha256:bb269eae6e6782668ae22f2a275aefdd9b98c3e05d77de4aca6a4c6cbaa4b3b8", size = 261810, upload-time = "2026-08-10T08:38:03.405Z" },
+]
+
+[[package]]
 name = "attrs"
 version = "26.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -406,12 +418,14 @@ source = { editable = "." }
 dependencies = [
     { name = "dbt-core" },
     { name = "dbt-databricks" },
+    { name = "dbterd" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "dbt-core", specifier = ">=1.12.4" },
     { name = "dbt-databricks", specifier = ">=1.10.9" },
+    { name = "dbterd", specifier = ">=1.31.0" },
 ]
 
 [[package]]
@@ -566,6 +580,20 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/d4/9b/5f6e07aef31f89e1dd7f3e0fe959013052efc15ea28f6157c239e30f5d48/dbt_spark-1.11.0.tar.gz", hash = "sha256:436aa57d662ebad8e56f606863e02045f73116566f85a600b9fa890a763f8c37", size = 83739, upload-time = "2026-07-16T17:03:55.317Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/07/77/f0163101e23650ad4f0905c426e3e1c7fc613c215be40164d74b175b9c48/dbt_spark-1.11.0-py3-none-any.whl", hash = "sha256:00d9c9cd3e13473df05b90740fddd8c3082083c45971aaba2fae7b01ab82f4f5", size = 51733, upload-time = "2026-07-16T17:03:53.614Z" },
+]
+
+[[package]]
+name = "dbterd"
+version = "1.31.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "artifact-parser" },
+    { name = "click" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0a/88/63ab4d15df32ed293ea0ea3d32bf443fe0b9d98daf8bb264d06c309fa8c5/dbterd-1.31.0.tar.gz", hash = "sha256:3b9305a4ce05d8845657318a6edf1bce700144138b8382fe9c2250432f5bc047", size = 67640, upload-time = "2026-09-06T07:39:41.945Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b4/e8/c06456cda1ca94fc123718a23771b9941e78691ad5cb968bb601a254126c/dbterd-1.31.0-py3-none-any.whl", hash = "sha256:f0bbdc587022fa7b8ca493d7a2a0473450744b60fd3430587d5718ebcf7d2d9b", size = 87073, upload-time = "2026-09-06T07:39:40.32Z" },
 ]
 
 [[package]]

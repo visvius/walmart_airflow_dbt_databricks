@@ -10,6 +10,7 @@ requires-python = ">=3.12"
 dependencies = [
     "dbt-core>=1.12.4",
     "dbt-databricks>=1.10.9",
+    "dbterd>=1.31.0",
 ]
 
 [project.scripts]
